@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 	"strconv"
+    "slices"
+
 )
 
 func readLines(path string) ([]string, error) {
@@ -35,6 +37,19 @@ func getMaxCalories(elves map[int]int) int {
     return max_calories
 }
 
+func getTopCaloriesSum(elves map[int]int) int  {
+    calories := make([]int, len(elves))
+
+    for index, value := range elves {
+        calories[index] =  value
+    }
+
+    slices.Sort(calories)
+    slices.Reverse(calories)
+    return calories[0] + calories[1] + calories[2]
+ 
+}
+
 func main()  {
     args := os.Args[1:]
     
@@ -59,10 +74,13 @@ func main()  {
         elves[index] += val 
         //fmt.Println(i, line)
     }
-    fmt.Println(elves)
-
+    
     max_calories := getMaxCalories(elves)
 
     fmt.Printf("the max calories are %d\n", max_calories)
+
+    calories := getTopCaloriesSum(elves)
+    fmt.Println(calories)
+
 
 }
