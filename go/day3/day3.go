@@ -48,6 +48,23 @@ func generatePriorityMap() map[string]int {
     return priorities
 }
 
+func findCommonChar(group []string) string {
+    var commonChar string
+    backpack1 := group[0]
+    backpack2 := group[1]
+    backpack3 := group[2]
+    for _, c1 := range backpack1 {
+        for _, c2 := range backpack2 {
+            for _, c3 := range backpack3 {
+                if c1 == c2  && c1 == c3 {
+                    commonChar = string(c1)
+                }
+            }
+        }
+    }
+    return commonChar
+}
+
 func main()  {
     args := os.Args[1:]
     if len(args) > 1 {
@@ -62,12 +79,23 @@ func main()  {
     priorities := generatePriorityMap()
    
     sum := 0
-    for _, bag := range in {
-        length := len(bag)
-        comp1 := bag[:(length/2)]
-        comp2 := bag[(length/2):]
-        common := commonChar(comp1, comp2)
-        sum += priorities[common]
+/*    var group []string
+    for index, bag := range in {
+        group = append(group, bag)
+        if index % 3 == 2 && index > 0 {
+            start := int(index / 3)
+            end := start + 3
+            commonChar := findCommonChar(group[start:end])
+            sum += priorities[commonChar]
+        }
+
+    }
+*/
+    for len(in) > 0 {
+        commonChar := findCommonChar(in[:3])
+        in = in[3:]
+        fmt.Println(commonChar)
+        sum += priorities[commonChar]
     }
     fmt.Println(sum)
 }
