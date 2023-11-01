@@ -103,11 +103,17 @@ func parseOperations(inputOperations []string) [][]int {
 func computeOperations(stacks []Stack[string], operations [][]int) string {
     for _, operation := range operations {
         quantity, source, destination := operation[0], operation[1], operation[2]
+        // the crates need to be moved in order for part 2
+        crates := make([]string, 0)
         for quantity > 0 {
             crate := stacks[source].Pop()
-            stacks[destination].Push(crate)
+            crates = append(crates, crate)
 
             quantity -= 1
+        }
+        length := len(crates) - 1
+        for index := range(crates) {
+            stacks[destination].Push(crates[length - index])
         }
     }
     out := ""
