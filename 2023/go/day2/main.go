@@ -55,13 +55,13 @@ func main() {
 	if err != nil {
 		logger.Fatal("failed reading from file", err)
 	}
-	availableCubes := map[string]int{
-		"green": 13,
-		"blue":  14,
-		"red":   12,
-	}
     sum := 0
     for _, line := range data {
+        availableCubes := map[string]int{
+            "green": 0,
+            "blue":  0,
+            "red":   0,
+        }
         lineSplit := strings.Split(line, ":")
         game := lineSplit[0]
         setsRaw := lineSplit[1]
@@ -69,7 +69,6 @@ func main() {
         if err != nil {
             log.Fatalf("failed converting game id to int")
         }
-        valid := true
         sets := strings.Split(setsRaw, ";")
         for _, set := range sets {
             cubes := parseCube(string(set))
@@ -81,17 +80,16 @@ func main() {
                     log.Fatalf("failed parsing cube no to int")
                 }
                 if availableCubes[cubeColor] < cubeNo {
-                    valid = false
-                    break
+                    availableCubes[cubeColor] = cubeNo
                 }
             }
-            if !valid {
-                break
-            }
         }
-        if valid {
-            sum += gameId
+        power := 1
+        for _, no := range availableCubes {
+           power *= no
         }
+        logger.Println("game", gameId, ":", power)
+        sum += power
     }
     log.Println("valid games sum: ", sum)
 }
